@@ -1,3 +1,4 @@
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:wechat/screens/home.dart';
 import 'package:wechat/widgets/appbar_widget.dart';
 import 'package:wechat/widgets/drawer_widget.dart';
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       // theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
       home: GestureDetector(
@@ -20,12 +21,12 @@ class MyApp extends StatelessWidget {
         child: Scaffold(
           appBar: AppBarWidget.appbar(),
             drawer: DrawerWidget.drawer(context),
-
             body: const HomeScreen()
-
         ),
       ),
     );
   }
 }
+
 // https://github.com/testbrain/connect.git
+
