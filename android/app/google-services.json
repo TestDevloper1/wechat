@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "712791646553",
+    "project_id": "wechat-3563f",
+    "storage_bucket": "wechat-3563f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712791646553:android:e003916971f10c9b55ac48",
+        "android_client_info": {
+          "package_name": "com.sparknet.wechat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDdYcWi257MAVAs4tmZEJiFFsEkRaiCAY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

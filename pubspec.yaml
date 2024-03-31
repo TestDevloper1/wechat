@@ -38,6 +38,16 @@ dependencies:
   fluttertoast: ^8.2.4
   get: ^4.6.6
   dio: ^5.4.2+1
+  firebase_core: ^2.27.0
+  flutter_firebase_chat_core: ^1.6.7
+  firebase_ui_auth: ^1.13.1
+  firebase_auth: ^4.17.8
+  firebase_messaging: ^14.7.19
+  firebase_storage: ^11.6.9
+  firebase_analytics: ^10.8.9
+  firebase_crashlytics: ^3.4.18
+  salomon_bottom_bar: ^3.3.2
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:

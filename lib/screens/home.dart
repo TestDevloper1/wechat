@@ -19,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return ListView(
       // physics: const NeverScrollableScrollPhysics(),
       children: [
+        SizedWidget.size(10, 0),
 
         SearchWidget.searchBar(),
 
@@ -28,11 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
         SizedWidget.size(10, 0),
 
-        DividerWidget.divider(),
-
         ChatProfileWidget.chat(),
-
-        // Chat.story(context)
 
 
       ],

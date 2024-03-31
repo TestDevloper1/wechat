@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
+import 'package:wechat/screens/chat_screen.dart';
 import '../model/meme_model.dart';
 import '../serivices/api.dart';
+import '../widgets/divider_widget.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class StoryScreen extends StatefulWidget {
+  const StoryScreen({super.key});
 
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  _StoryScreenState createState() => _StoryScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
-  List<Meme> memes = [];
+class _StoryScreenState extends State<StoryScreen> {
+  List<Meme> chat = [];
 
   @override
   void initState() {
@@ -24,10 +26,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       MemesService api = MemesService();
       List<Meme> fetchedMemes = await api.fetchMemes();
       setState(() {
-        memes = fetchedMemes;
+        chat = fetchedMemes;
       });
     } catch (error) {
-      print('Failed to fetch memes: $error');
+      print('Failed to fetch chat: $error');
       // Handle error gracefully
     }
   }
@@ -41,25 +43,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
         decoration: const BoxDecoration(),
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1),
-          itemCount: memes.length,
+          itemCount: chat.length,
           scrollDirection: Axis.horizontal,
           itemBuilder: (context, index) {
-            final meme = memes[index];
-            return Padding(
-              padding: const EdgeInsets.all(5),
-              child: InkWell(
-                onTap: () {
-                  print('story');
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(50)),
-                    image: DecorationImage(
-                      image: NetworkImage('https://twilsms.com/meme_admin/${meme.thumbnail}'),
-                      fit: BoxFit.cover,
+            final meme = chat[index];
+            return InkWell(
+              onTap: () {
+                print('story');
+              },
+              child: Column(
+                children: [
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(50)),
+                      image: DecorationImage(
+                        image: NetworkImage('https://twilsms.com/meme_admin/${meme.thumbnail}'),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
+
+                  const Expanded(child: Text('Name', maxLines: 1)),
+
+                ],
               ),
             );
           },
@@ -80,7 +88,7 @@ class ChatProfileScreen extends StatefulWidget {
 }
 
 class _ChatProfileScreenState extends State<ChatProfileScreen> {
-  List<Meme> memes = [];
+  List<Meme> chat = [];
 
   @override
   void initState() {
@@ -92,113 +100,65 @@ class _ChatProfileScreenState extends State<ChatProfileScreen> {
     try {
       MemesService api = MemesService();
       List<Meme> fetchedMemes = await api.fetchMemes();
+
       setState(() {
-        memes = fetchedMemes;
+        chat = fetchedMemes;
       });
     } catch (error) {
-      print('Failed to fetch memes: $error');
-      // Handle error gracefully
+      print('Failed to fetch chat: $error');
     }
   }
   //'https://twilsms.com/meme_admin/${meme.thumbnail}'
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 12, left: 12),
+      padding: const EdgeInsets.only(right: 0, left: 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+
+          DividerWidget.divider(),
+
           Container(
             height: MediaQuery.of(context).size.height * 0.6,
-            // width: 80,
-            decoration: const BoxDecoration(),
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1),
-              // itemCount: memes.length,
-              itemCount: 8,
+            width: MediaQuery.of(context).size.width,
+            decoration: const BoxDecoration(
+              // borderRadius: BorderRadius.circular(50),
+              // color: Colors.red
+            ),
+            child: ListView.builder(
+              itemCount: chat.length,
+              // itemCount: 8,
               scrollDirection: Axis.vertical,
+
               itemBuilder: (context, index) {
-                final meme = memes[index];
-                return Padding(
-                  padding: const EdgeInsets.all(5),
-                  child: InkWell(
-                    onTap: () {
-
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        // color: Colors.grey.shade100,
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-
-                          Container(
-                            width: 80,
-                            height: 80,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.grey.shade100,
-                              image: DecorationImage(
-                                  image:NetworkImage('https://twilsms.com/meme_admin/${meme.thumbnail}'),
-                                  fit: BoxFit.cover
-                              ),
-                            ),
-                          ),
-                          // if(imageUrl.isEmpty)
-                          // Container(
-                          //   width: 80,
-                          //   height: 80,
-                          //   decoration: BoxDecoration(
-                          //     borderRadius: BorderRadius.circular(10),
-                          //     color: Colors.grey.shade100,
-                          //     image: DecorationImage(
-                          //         image:NetworkImage('https://twilsms.com/meme_admin/$thumbna'),
-                          //         fit: BoxFit.cover
-                          //     ),
-                          //   ),
-                          //   child: Center(
-                          //     child: Wrap(
-                          //       children: [
-                          //         // if (Url.contains("mp4"))
-                          //         Icon(Icons.play_arrow,color: Colors.grey,size: 50),
-                          //       ],
-                          //     ),
-                          //   ),
-                          // ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 25),
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: 50,
-                                      width: MediaQuery.of(context).size.width * 0.6,
-                                      child: ListTile(
-                                        title:  Text(meme.description.trim(),
-                                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    )
-                                    // Spacer(),
-                                    // Icon(Icons.search)
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                final meme = chat[index];
+                return ListTile(
+                  onTap: () {
+                    Get.to( ChatScreen(profile: meme.thumbnail, name: meme.description,));
+                  },
+                  title: Row(
+                    children: [
+                      Expanded(child: Text(meme.description, maxLines: 1)),
+                      SizedWidget.size(0, 10),
+                      Text('4:45', maxLines: 1,style: TextStyle(fontSize: 13, color: Colors.blue.shade900)),
+                    ],
+                  ),
+                  subtitle: const Text('Last message'),
+                  leading: Container(
+                    width: 55,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(40),
+                      color: Colors.grey.shade100,
+                      image: DecorationImage(
+                        image: NetworkImage('https://twilsms.com/meme_admin/${meme.thumbnail}'),
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
+
                 );
               },
             ),
