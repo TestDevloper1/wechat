@@ -10,12 +10,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: const FirebaseOptions(
-      appId:"1:712791646553:android:e003916971f10c9b55ac48",
+      appId: "1:712791646553:android:e003916971f10c9b55ac48",
       apiKey: "AIzaSyCDdYcWi257MAVAs4tmZEJiFFsEkRaiCAY",
       messagingSenderId: "712791646553",
       projectId: "wechat-3563f",
@@ -24,10 +25,10 @@ void main() async {
 
   /// Pass all uncaught errors from the framework to Crashlytics.
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-  (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+  (error, stack) =>
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
 
   runApp(const MyApp());
-
 }
 
 class MyApp extends StatefulWidget {
@@ -42,12 +43,10 @@ class _MyAppState extends State<MyApp> {
   var _currentIndex = 0;
   late ThemeData _currentTheme = ThemeData.light();
 
-
   @override
   void initState() {
     super.initState();
     _loadTheme();
-
   }
 
   /// for save theme in Shared Preference
@@ -70,80 +69,83 @@ class _MyAppState extends State<MyApp> {
   /// change theme on button press
   void changeTheme() {
     setState(() {
-      _currentTheme =
-      _currentTheme == ThemeData.light() ? ThemeData.dark() : ThemeData.light();
+      _currentTheme = _currentTheme == ThemeData.light()
+          ? ThemeData.dark()
+          : ThemeData.light();
       _saveTheme(_currentTheme == ThemeData.dark());
     });
   }
 
   @override
+
+
   Widget build(BuildContext context) {
     return GetMaterialApp(
       theme: _currentTheme,
       debugShowCheckedModeBanner: false,
-      home: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: Scaffold(
-          appBar: AppBarWidget.appbar(),
-          drawer: DrawerWidget.drawer(context, changeTheme),
-            body: PageView(
-              physics: const NeverScrollableScrollPhysics(),
-              controller: _pageController,
-              children: const <Widget>[
-                HomeScreen(),
-                ChatScreen(profile: '', name: '',),
-                HomeScreen(),
-                ChatScreen(profile: '', name: '',),
+      home:  GestureDetector(
+              onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+              child: Scaffold(
+                appBar: AppBarWidget.appbar(),
+                drawer: DrawerWidget.drawer(context, changeTheme),
+                body: PageView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: _pageController,
+                  children: const <Widget>[
+                    HomeScreen(),
+                    ChatScreen(
+                      profile: '',
+                      name: '',
+                    ),
+                    HomeScreen(),
+                    ChatScreen(
+                      profile: '',
+                      name: '',
+                    ),
+                  ],
+                ),
+                extendBody: true,
+                bottomNavigationBar: SalomonBottomBar(
+                  // backgroundColor: _currentTheme,
+                  backgroundColor: _currentTheme.colorScheme.background,
+                  currentIndex: _currentIndex,
+                  onTap: (index) {
+                    setState(() {
+                      _currentIndex = index;
+                      _pageController.animateToPage(
+                        index,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    });
+                  },
 
-              ],
+                  unselectedItemColor: Colors.grey,
+                  items: [
+                    SalomonBottomBarItem(
+                      icon: const Icon(Icons.chat),
+                      title: const Text("Chat"),
+                      selectedColor: Colors.teal,
+                    ),
+                    SalomonBottomBarItem(
+                      icon: const Icon(Icons.call),
+                      title: const Text("Call"),
+                      selectedColor: Colors.teal,
+                    ),
+                    SalomonBottomBarItem(
+                      icon: const Icon(Icons.camera_alt),
+                      title: const Text("Camera"),
+                      selectedColor: Colors.teal,
+                    ),
+                    SalomonBottomBarItem(
+                      icon: const Icon(Icons.person),
+                      title: const Text("Profile"),
+                      selectedColor: Colors.teal,
+                    ),
+                  ],
+                ),
+              ),
             ),
-
-          extendBody: true,
-
-          bottomNavigationBar: SalomonBottomBar(
-        // backgroundColor: _currentTheme,
-        backgroundColor: _currentTheme.colorScheme.background,
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-              _pageController.animateToPage(
-                index,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-              );
-            });
-          },
-
-          unselectedItemColor: Colors.grey,
-          items: [
-            SalomonBottomBarItem(
-              icon: const Icon(Icons.chat),
-              title: const Text("Chat"),
-              selectedColor: Colors.teal,
-            ),
-            SalomonBottomBarItem(
-              icon: const Icon(Icons.call),
-              title: const Text("Call"),
-              selectedColor: Colors.teal,
-            ),
-
-            SalomonBottomBarItem(
-              icon: const Icon(Icons.camera_alt),
-              title: const Text("Camera"),
-              selectedColor: Colors.teal,
-            ),
-
-            SalomonBottomBarItem(
-              icon: const Icon(Icons.person),
-              title: const Text("Profile"),
-              selectedColor: Colors.teal,
-            ),
-          ],
-        ),
-
-        ),
-      ),
     );
   }
 }

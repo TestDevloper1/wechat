@@ -1,342 +1,321 @@
-// import 'dart:io';
-// import 'package:meme_app/privacy_Policy/privacyPolicyScreen.dart';
-// import 'package:meme_app/test.dart';
-//
-// import 'helper/permition_helper.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_downloader/flutter_downloader.dart';
-// import 'package:meme_app/pushnotification.dart';
-// import 'package:meme_app/screen/category_screen.dart';
-// import 'package:meme_app/screen/home.dart';
-// import 'package:meme_app/screen/search_screen.dart';
-// import 'package:overlay_support/overlay_support.dart';
-// import 'package:permission_handler/permission_handler.dart';
-// import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
-// import 'package:get/get.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'helper/firebase_const.dart';
-// import 'helper/paths.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
-//
-//
-// // Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-// //   print("Handling a background message codewaa: ${message.messageId}");
-// //
-// // }
-//
-//
-//
-//
-// // void main() async {
-// //   WidgetsFlutterBinding.ensureInitialized();
-// //
-// //   await Firebase.initializeApp(
-// //     options: FirebaseOptions(
-// //       apiKey: FirebaseConst.apiKey,
-// //       appId: FirebaseConst.appId,
-// //       messagingSenderId: FirebaseConst.messagingSenderId,
-// //       projectId: FirebaseConst.projectId,
-// //     ),
-// //   );
-// //
-// //   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-// //
-// //   /// For handling notification when the app is in terminated state
-// //   RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
-// //   if (initialMessage != null) {
-// //     print(initialMessage);
-// //     PushNotification notification = PushNotification(
-// //       title: initialMessage.notification?.title,
-// //       body: initialMessage.notification?.body,
-// //       dataTitle: initialMessage.data['title'],
-// //       dataBody: initialMessage.data['body'],
-// //     );
-// //     print(notification);
-// //   }
-// //
-// //   /// for print FCM tocken
-// //   final fcmToken = await FirebaseMessaging.instance.getToken();
-// //   await FirebaseMessaging.instance.setAutoInitEnabled(true);
-// //   print("FCMToken $fcmToken");
-// //
-// //   /// Downloader
-// //   await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
-// //
-// //   runApp(const MyApp());
-// // }
-//
-// class MyApp extends StatefulWidget {
-//   const MyApp({Key? key}) : super(key: key);
-//
-//   @override
-//   State<MyApp> createState() => _MyAppState();
-// }
-//
-// class _MyAppState extends State<MyApp> {
-//   var _pageController = PageController();
-//   var _currentIndex = 0;
-//   late ThemeData _currentTheme = ThemeData.light();
-//
-//   FirebaseMessaging _messaging = FirebaseMessaging.instance;
-//   int _totalNotifications = 0;
-//   PushNotification? _notificationInfo;
-//   bool _permissionGranted = false;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     // _checkPermissions();
-//     // _messaging.subscribeToTopic('topics-memes');
-//     // _totalNotifications = 0;
-//     // registerNotification();
-//     // checkForInitialMessage();
-//     // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-//     //   handleNotification(message);
-//     // });
-//     // _createDownloadFolder();
-//     _loadTheme();
-//
-//   }
-//
-//   //
-//   // Future<void> _checkPermissions() async {
-//   //   await _requestPermissions();
-//   // }
-//   //
-//   // /// Request permissions
-//   // Future<void> _requestPermissions() async {
-//   //   await Helper.requestPermission(Permission.storage);
-//   //   if (Platform.isAndroid) {
-//   //     await Helper.requestPermission(Permission.notification);
-//   //     await Helper.requestPermission(Permission.photos);
-//   //     await Helper.requestPermission(Permission.audio);
-//   //     await Helper.requestPermission(Permission.videos);
-//   //   }
-//   //   _permissionGranted = await Helper.getStoragePermission();
-//   //   setState(() {});
-//   // }
-//   //
-//   // /// create folder in android
-//   // void _createDownloadFolder() async {
-//   //   PathController _localPath = PathController();
-//   //   await Permission.manageExternalStorage.request();
-//   //   var stickDirectory = Directory(_localPath.localPath);
-//   //   await stickDirectory.create(recursive: true);
-//   // }
-//   //
-//   // /// for push notification
-//   // void registerNotification() async {
-//   //   NotificationSettings settings = await _messaging.requestPermission(
-//   //     alert: true,
-//   //     badge: true,
-//   //     provisional: false,
-//   //     sound: true,
-//   //   );
-//   //   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-//   //     print('User granted permission');
-//   //     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-//   //       handleNotification(message);
-//   //     });
-//   //   } else {
-//   //     print('User declined or has not accepted permission');
-//   //   }
-//   // }
-//   //
-//   //
-//   // void checkForInitialMessage() async {
-//   //   RemoteMessage? initialMessage = await _messaging.getInitialMessage();
-//   //   if (initialMessage != null) {
-//   //     handleNotification(initialMessage);
-//   //   }
-//   // }
-//   //
-//   // /// for handle push notification
-//   // void handleNotification(RemoteMessage message) {
-//   //   PushNotification notification = PushNotification(
-//   //     title: message.notification?.title,
-//   //     body: message.notification?.body,
-//   //     dataTitle: message.data['title'],
-//   //     dataBody: message.data['body'],
-//   //   );
-//   //   setState(() {
-//   //     _notificationInfo = notification;
-//   //     _totalNotifications++;
-//   //   });
-//   //   if (_notificationInfo != null) {
-//   //     showSimpleNotification(
-//   //       Text(_notificationInfo!.title ?? ''),
-//   //       subtitle: Text(_notificationInfo!.body ?? ''),
-//   //       background: Colors.white,
-//   //       duration: Duration(seconds: 3),
-//   //     );
-//   //   }
-//   // }
-//
-//   /// for save theme in Shared Preference
-//   Future<void> _saveTheme(bool isDarkMode) async {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     prefs.setBool('isDarkMode', isDarkMode);
-//   }
-//
-//   /// load save theme in shared preference
-//   Future<void> _loadTheme() async {
-//     SharedPreferences prefs = await SharedPreferences.getInstance();
-//     bool? isDarkMode = prefs.getBool('isDarkMode');
-//     if (isDarkMode != null) {
-//       setState(() {
-//         _currentTheme = isDarkMode ? ThemeData.dark() : ThemeData.light();
-//       });
-//     }
-//   }
-//
-//   /// change theme on button press
-//   void changeTheme() {
-//     setState(() {
-//       _currentTheme =
-//       _currentTheme == ThemeData.light() ? ThemeData.dark() : ThemeData.light();
-//       _saveTheme(_currentTheme == ThemeData.dark());
-//     });
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return OverlaySupport(
-//       child: GestureDetector(
-//         onTap: () {
-//           FocusScope.of(context).requestFocus(FocusNode());
-//           // onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-//         },
-//         child: GetMaterialApp(
-//           theme: _currentTheme,
-//           debugShowCheckedModeBanner: false,
-//           home: Scaffold(
-//             appBar: AppBar(
-//               title: const Text('Memes Template'),
-//             ),
-//             drawer: Drawer(
-//               width: 280,
-//               child: Container(
-//                 child: Column(
-//                   children: [
-//                     Container(
-//                       height: 150,
-//                       width: MediaQuery.of(context).size.width,
-//                       decoration: BoxDecoration(color: Colors.blue,),
-//                       child: Center(child: Text('Memes Template',style: TextStyle(fontSize: 25),)),
-//                     ),
-//
-//                     TextButton(
-//                       onPressed: () {
-//                         changeTheme();
-//                       },
-//                       child: Row(
-//                         children: [
-//                           Icon(_currentTheme == ThemeData.light() ? Icons.nightlight_round : Icons.sunny),
-//                           SizedBox(width: 20,),
-//                           Text(_currentTheme == ThemeData.light() ? 'Dark Mode' : 'Light Mode'),
-//                         ],
-//                       ),
-//                     ),
-//
-//                     // TextButton(
-//                     //   onPressed: () {
-//                     //     Get.to(Search_Screen());
-//                     //   },
-//                     //   child: Row(
-//                     //     children: [
-//                     //       Icon(Icons.search),
-//                     //       SizedBox(width: 20,),
-//                     //       Text('Search'),
-//                     //     ],
-//                     //   ),
-//                     // ),
-//
-//                     TextButton(
-//                       onPressed: () {
-//                         Get.back();
-//                         Get.to(Privacy_Policy_Screen());
-//                       },
-//                       child: Row(
-//                         children: [
-//                           Icon(Icons.help_outline_rounded),
-//                           SizedBox(width: 20,),
-//                           Text('Help & Support'),
-//                         ],
-//                       ),
-//                     ),
-//
-//                     // TextButton(
-//                     //   onPressed: () {
-//                     //     Get.to(ShowDownloadFiles());
-//                     //   },
-//                     //   child:
-//                     //       Icon(Icons.comment),
-//                     // ),
-//
-//                   ],
-//                 ),
-//               ),
-//             ),
-//
-//             body: PageView(
-//               physics: const NeverScrollableScrollPhysics(),
-//               controller: _pageController,
-//               children: <Widget>[
-//                 HomeScreen(),
-//                 Get_Category(),
-//                 // VideoPage(),
-//                 Search_Screen(),
-//               ],
-//             ),
-//
-//             extendBody: true,
-//
-//             bottomNavigationBar: SalomonBottomBar(
-//               // backgroundColor: _currentTheme,
-//               backgroundColor: _currentTheme.colorScheme.background,
-//               currentIndex: _currentIndex,
-//               onTap: (index) {
-//                 setState(() {
-//                   _currentIndex = index;
-//                   _pageController.animateToPage(
-//                     index,
-//                     duration: const Duration(milliseconds: 300),
-//                     curve: Curves.easeInOut,
-//                   );
-//                 });
-//               },
-//               unselectedItemColor: Colors.grey,
-//               items: [
-//                 SalomonBottomBarItem(
-//                   icon: Icon(Icons.home),
-//                   title: Text("Home"),
-//                   selectedColor: Colors.teal,
-//                 ),
-//                 SalomonBottomBarItem(
-//                   icon: Icon(Icons.category),
-//                   title: Text("Category"),
-//                   selectedColor: Colors.teal,
-//                 ),
-//
-//                 // SalomonBottomBarItem(
-//                 //   icon: Icon(Icons.video_library),
-//                 //   title: Text("Videos"),
-//                 //   selectedColor: Colors.orange,
-//                 // ),
-//
-//                 SalomonBottomBarItem(
-//                   icon: Icon(Icons.search),
-//                   title: Text("Search"),
-//                   selectedColor: Colors.teal,
-//                 ),
-//               ],
-//             ),
-//
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-//
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:image_picker/image_picker.dart';
+
+
+
+
+
+class AuthScreen extends StatefulWidget {
+  @override
+  _AuthScreenState createState() => _AuthScreenState();
+}
+
+class _AuthScreenState extends State<AuthScreen> {
+  final _auth = FirebaseAuth.instance;
+  final _formKey = GlobalKey<FormState>();
+  String _email = '';
+  String _password = '';
+  bool _isLogin = true;
+
+  void _submitAuthForm() async {
+    final isValid = _formKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+    _formKey.currentState!.save();
+
+    try {
+      if (_isLogin) {
+        await _auth.signInWithEmailAndPassword(
+          email: _email,
+          password: _password,
+        );
+      } else {
+        await _auth.createUserWithEmailAndPassword(
+          email: _email,
+          password: _password,
+        );
+      }
+    } catch (error) {
+      print(error);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred')),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(_isLogin ? 'Login' : 'Register'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                key: ValueKey('email'),
+                decoration: InputDecoration(labelText: 'Email'),
+                validator: (value) {
+                  if (value == null || !value.contains('@')) {
+                    return 'Please enter a valid email';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _email = value!;
+                },
+              ),
+              TextFormField(
+                key: ValueKey('password'),
+                decoration: InputDecoration(labelText: 'Password'),
+                obscureText: true,
+                validator: (value) {
+                  if (value == null || value.length < 6) {
+                    return 'Password must be at least 6 characters long';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _password = value!;
+                },
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _submitAuthForm,
+                child: Text(_isLogin ? 'Login' : 'Register'),
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _isLogin = !_isLogin;
+                  });
+                },
+                child: Text(
+                  _isLogin ? 'Don\'t have an account? Register' : 'Already have an account? Login',
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
+  final _storage = FirebaseStorage.instance;
+  final _picker = ImagePicker();
+  User? _user;
+  String _name = '';
+  String _profilePicUrl = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _user = _auth.currentUser;
+    if (_user != null) {
+      _firestore.collection('users').doc(_user!.uid).get().then((doc) {
+        setState(() {
+          _name = doc['name'];
+          _profilePicUrl = doc['profilePic'];
+        });
+      });
+    }
+  }
+
+  Future<void> _pickProfilePicture() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      final storageRef = _storage.ref().child('profile_pics').child('${_user!.uid}.jpg');
+      await storageRef.putFile(File(pickedFile.path));
+      final url = await storageRef.getDownloadURL();
+      setState(() {
+        _profilePicUrl = url;
+      });
+      await _firestore.collection('users').doc(_user!.uid).update({
+        'profilePic': _profilePicUrl,
+      });
+    }
+  }
+
+  void _updateName(String value) {
+    _name = value;
+    _firestore.collection('users').doc(_user!.uid).update({
+      'name': _name,
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Profile'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            if (_profilePicUrl.isNotEmpty)
+              CircleAvatar(
+                backgroundImage: NetworkImage(_profilePicUrl),
+                radius: 50,
+              ),
+            if (_profilePicUrl.isEmpty)
+              CircleAvatar(
+                child: Icon(Icons.person, size: 50),
+                radius: 50,
+              ),
+            TextButton(
+              onPressed: _pickProfilePicture,
+              child: Text('Change Profile Picture'),
+            ),
+            TextFormField(
+              initialValue: _name,
+              decoration: InputDecoration(labelText: 'Name'),
+              onChanged: _updateName,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+class ChatScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Chat'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+            },
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('messages')
+                  .orderBy('timestamp', descending: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                final docs = snapshot.data!.docs;
+                return ListView.builder(
+                  reverse: true,
+                  itemCount: docs.length,
+                  itemBuilder: (context, index) {
+                    return ChatMessageBubble(
+                      docs[index]['text'],
+                      docs[index]['senderName'],
+                      docs[index]['senderProfilePic'],
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+          NewMessageInput(),
+        ],
+      ),
+    );
+  }
+}
+
+class ChatMessageBubble extends StatelessWidget {
+  final String text;
+  final String senderName;
+  final String senderProfilePic;
+
+  ChatMessageBubble(this.text, this.senderName, this.senderProfilePic);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundImage: CachedNetworkImageProvider(senderProfilePic),
+      ),
+      title: Text(senderName),
+      subtitle: Text(text),
+    );
+  }
+}
+
+class NewMessageInput extends StatefulWidget {
+  @override
+  _NewMessageInputState createState() => _NewMessageInputState();
+}
+
+class _NewMessageInputState extends State<NewMessageInput> {
+  final _textController = TextEditingController();
+
+  void _sendMessage() async {
+    final text = _textController.text.trim();
+    if (text.isEmpty) {
+      return;
+    }
+
+    final user = FirebaseAuth.instance.currentUser;
+    final userDoc = await FirebaseFirestore.instance.collection('users').doc(user!.uid).get();
+    final senderName = userDoc['name'];
+    final senderProfilePic = userDoc['profilePic'];
+
+    FirebaseFirestore.instance.collection('messages').add({
+      'text': text,
+      'senderName': senderName,
+      'senderProfilePic': senderProfilePic,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+
+    _textController.clear();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _textController,
+              decoration: InputDecoration(labelText: 'Type a message'),
+            ),
+          ),
+          IconButton(
+            icon: Icon(Icons.send),
+            onPressed: _sendMessage,
+          ),
+        ],
+      ),
+    );
+  }
+}
+

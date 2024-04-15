@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:wechat/widgets/toast_widget.dart';
 
+import '../helper/color_helper.dart';
+
 class SearchWidget {
   static Padding searchBar() {
     final TextEditingController textController = TextEditingController();
@@ -22,18 +24,29 @@ class SearchWidget {
 
 
 
-class ButtonWidget {
-  static InkWell button() {
-    // final TextEditingController textController = TextEditingController();
-    return InkWell(
-      onTap: () {
-        ToastWidget.showToast('message');
-      },
-      child: Container(
-        // color: Colors.red,
-        height: 50,
-        width: 50,
-        child: const Center(child: Text('Button')),
+class TextFieldWidget {
+  static Padding chatBar() {
+    final TextEditingController textController = TextEditingController();
+    return Padding(
+      padding: const EdgeInsets.only(left: 0, right: 0,),
+      child: TextField(
+
+        controller: textController,
+        textInputAction: TextInputAction.search,
+
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+          hintText: "Message",
+          prefixIcon: IconButton(
+            onPressed: () {
+              ToastWidget.showToast('We are working on emoji');
+            },
+            icon: const Icon(Icons.emoji_emotions_rounded,)
+          ),
+          suffixIcon: const Icon(Icons.send_sharp),
+          filled: true,
+
+        ),
       ),
     );
   }

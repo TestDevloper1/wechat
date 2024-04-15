@@ -9,5 +9,6 @@ class AppColor {
   static const Color secondPrimary = Color(0xffa0593f);
   static const Color primary = Color(0xff224ca3);
   static const Color primary2 = Colors.blue;
-// static const Color background = Colors.black12;
+  static Color sendMessage = Colors.deepPurple;
+  static Color receiveMessage = Colors.grey;
 }

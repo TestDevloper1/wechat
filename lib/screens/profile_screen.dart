@@ -158,7 +158,6 @@ class _ChatProfileScreenState extends State<ChatProfileScreen> {
                       ),
                     ),
                   ),
-
                 );
               },
             ),
